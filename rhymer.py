@@ -24,7 +24,7 @@ print(interact.HELP)
 userInput = ''
 
 # Keep prompting user for input until they want to quit
-while not userInput is None:
+while True:
     # Update user command
     userInput = ''
 
