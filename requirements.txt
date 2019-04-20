@@ -1,0 +1,4 @@
+Compiled, tested on Python version 3.6.7.
+
+Packages used:
+	NLTK
