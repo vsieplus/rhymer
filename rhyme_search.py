@@ -3,6 +3,7 @@
 # Description: Functionality to search for rhymes
 
 import setup 
+import interact
 
 # Extract pronunciation(s) for a word/phrase
 def word_to_pron(word):
@@ -43,3 +44,51 @@ def word_to_pron(word):
                 pronunciations[j] = pronunciations[j] + pronlist[i]
 
     return pronunciations 
+
+# Functions to search for various rhymes 
+# Each takes a pronunciation given as a list of phones and 
+# returns a list of words (in English orthography) for the given rhyme type
+
+def perfect(pron):
+    return 0
+
+def near(pron):
+    return 0
+
+def syllabic(pron):
+    return 0
+
+def semi(pron):
+    return 0
+
+def para(pron):
+    return 0
+
+def asson(pron):
+    return 0
+
+def identical(pron):
+    return 0
+
+def eye(pron):
+    return 0
+
+def rhyme_type_to_func(rtype):
+    """Switch statement for determining behavior depending on specified
+        type of rhyme"""
+    type_dict = {
+        interact.TYPES[interact.PERFECT_IDX]: perfect,
+        interact.TYPES[interact.NEAR_IDX]: near,
+        interact.TYPES[interact.SYLLABIC_IDX]: syllabic,
+        interact.TYPES[interact.SEMI_IDX]: semi,
+        interact.TYPES[interact.PARA_IDX]: para,
+        interact.TYPES[interact.ASSON_IDX]: asson,
+        interact.TYPES[interact.ID_IDX]: identical,
+        interact.TYPES[interact.EYE_IDX]: eye,
+    }
+
+    rhyme_func = type_dict.get(rtype)
+
+    # Return result of the corresponding function
+    return rhyme_func()
+

@@ -47,7 +47,7 @@ while True:
 
     # Otherwise, determine what behavior to run
     if parseResult == 'rhyme':
-        print(2) 
+        pronunciations = rhyme_search.word_to_pron(interact.USER_WORD)
 
     if parseResult == 'stats':
         print(3)

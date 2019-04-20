@@ -37,6 +37,14 @@ EXIT = "Is it already time? Well thanks for the rhymes!"
 # Rhyme Types with examples
 TYPES = ['perfect', 'near', 'syllabic', 'semi', 'para', 'assonance',
          'identical', 'eye']
+PERFECT_IDX = 0
+NEAR_IDX = 1
+SYLLABIC_IDX = 2
+SEMI_IDX = 3
+PARA_IDX = 4
+ASSON_IDX = 5
+ID_IDX = 6
+EYE_IDX = 7
 
 RHYME_TYPES = """\nRhyme Types:\n
 'perfect'   - rhyme in which the final stressed vowel + all subsequent
