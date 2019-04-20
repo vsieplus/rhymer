@@ -8,15 +8,14 @@ Usage: python rhymer.py
 """
 # Import modules
 import sys
-import setup
 import interact
+import rhyme_search
+import stats_search
 
 # Ensure correct command line usage
 if(len(sys.argv) != 1):
     print(__doc__)
     sys.exit(0)
-
-# Setup
 
 # Initial User prompt
 print(interact.WELCOME)
@@ -39,8 +38,19 @@ while not userInput is None:
     if(parsedCmd[0] == interact.COMMANDS[interact.QUIT_IDX]):
         break;
 
-    print(interact.commands_to_str(parsedCmd))
+    # Parse user input
+    parseResult = interact.commands_to_str(parsedCmd)
 
+    # If not 'rhyme' or 'stats', we already printed what we needed to, so reloop
+    if not parseResult in ['rhyme', 'stats']:
+        continue
+
+    # Otherwise, determine what behavior to run
+    if parseResult == 'rhyme':
+        print(2) 
+
+    if parseResult == 'stats':
+        print(3)
 
 # Exit Script
 print(interact.EXIT)

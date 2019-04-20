@@ -63,8 +63,12 @@ RHYME_TYPES2 = """\nMore Rhyme Types:\n
               identically, but the sounds are not identical\n
 \t  'love'  ~  'move'"""
 
-SEARCHING = "\nSearching for rhymes of the word {}...\n"
+SEARCHING = "\nSearching for {} rhymes of the word {}...\n"
 STATS = "\nCalculating stats for the word {}...\n"
+
+# User input variables
+USER_WORD = ''
+USER_RHYME_TYPE = ''
 
 # Helper function to ensure correct arguments used with 'rhyme' or 'stats'
 def parse_word(parsedCmd):
@@ -80,16 +84,20 @@ def parse_word(parsedCmd):
         if(not parsedCmd[TYPE_IDX] in TYPES):
             return INVALID_TYPE.format(parsedCmd[TYPE_IDX])
 
-        # Otherwise, return searching for 'word'
-        return SEARCHING.format(parsedCmd[WORD_IDX])
+        # Otherwise, set word + type and return corresponding string
+        USER_WORD = parsedCmd[WORD_IDX]
+        USER_RHYME_TYPE = parsedCmd[TYPE_IDX]
+        return SEARCHING.format(parsedCmd[TYPE_IDX], parsedCmd[WORD_IDX])
     elif cmd == COMMANDS[STATS_IDX]:
         # Same thing
         if(len(parsedCmd) != 2):
             return WRONG_ARGS.format(cmd)
         
+        USER_WORD = parsedCmd[WORD_IDX]
         return STATS.format(parsedCmd[WORD_IDX])
 
 # Switch statement to determine behavior based on user inputted command
+# Returns command index of specified command 
 def commands_to_str(parsedCmd):    
     """Effective switch statement for parsing user inputted command"""
     switch = {
@@ -100,5 +108,7 @@ def commands_to_str(parsedCmd):
         COMMANDS[HELP_IDX]: HELP,
     }
 
-    return switch.get(parsedCmd[CMD_IDX], 
-                      UNRECOGNIZED_COMMAND.format(parsedCmd[CMD_IDX]))
+    print(switch.get(parsedCmd[CMD_IDX], 
+                     UNRECOGNIZED_COMMAND.format(parsedCmd[CMD_IDX])))
+
+    return parsedCmd[CMD_IDX]
