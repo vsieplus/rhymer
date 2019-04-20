@@ -19,6 +19,7 @@ def word_to_pron(word):
         word_prons = [[pron for pron in setup.PRON_DICT[w]] for w in words]
     except KeyError:
         # If no matching word was found
+        print(interact.WORD_NOT_FOUND.format(interact.USER_WORD))
         return None 
 
     # Create all possible concatenations of pronunciations
@@ -50,6 +51,7 @@ def word_to_pron(word):
 # returns a list of words (in English orthography) for the given rhyme type
 
 def perfect(pron):
+    """Find perfect rhymes for the given pronunciation"""
     return 0
 
 def near(pron):
@@ -73,6 +75,7 @@ def identical(pron):
 def eye(pron):
     return 0
 
+# Switch statement to retrieve
 def rhyme_type_to_func(rtype):
     """Switch statement for determining behavior depending on specified
         type of rhyme"""
@@ -87,8 +90,4 @@ def rhyme_type_to_func(rtype):
         interact.TYPES[interact.EYE_IDX]: eye,
     }
 
-    rhyme_func = type_dict.get(rtype)
-
-    # Return result of the corresponding function
-    return rhyme_func()
-
+    return type_dict.get(rtype)

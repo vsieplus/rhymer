@@ -47,7 +47,25 @@ while True:
 
     # Otherwise, determine what behavior to run
     if parseResult == 'rhyme':
+        # Extract pronunciation
         pronunciations = rhyme_search.word_to_pron(interact.USER_WORD)
+        
+        # Retrieve the appropriate rhyming function
+        rhyme_search = rhyme_search.rhyme_type_to_func(interact.USER_RHYME_TYPE)
+
+        # For each pronunciation, search for rhymes, printing results
+        for i in range(len(pronunciations)):
+            rhymes = rhyme_search(pronunciations[i])
+
+            # if none found
+            if rhymes == []:
+                print(interact.RHYMES_NOT_FOUND.format(interact.USER_RHYME_TYPE,
+                        interact.USER_WORD))
+                continue
+
+            # otherwise print each word
+            print(interact.RHYMES_FOUND.format(interact.USER_RHYME_TYPE,
+                    i, interact.USER_WORD), ", ".join(rhymes), "\n")
 
     if parseResult == 'stats':
         print(3)

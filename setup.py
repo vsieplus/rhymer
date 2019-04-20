@@ -5,5 +5,6 @@
 # Import nltk
 import nltk
 
-# Store CMU Pronunciation Dictionary 
+# Store CMU Pronunciation Entries + Dictionary 
+ENTRIES = nltk.corpus.cmudict.entries()
 PRON_DICT = nltk.corpus.cmudict.dict()
