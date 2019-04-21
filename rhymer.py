@@ -35,14 +35,16 @@ while True:
     parsedCmd = userInput.split()
 
     # Break from loop if user wants to quit
-    if(parsedCmd[0] == interact.COMMANDS[interact.QUIT_IDX]):
+    if(parsedCmd[interact.CMD_IDX] == interact.COMMANDS[interact.QUIT_IDX]):
         break;
 
     # Parse user input
     parseResult = interact.commands_to_str(parsedCmd)
 
-    # If not 'rhyme' or 'stats', we already printed what we needed to, so reloop
-    if not parseResult in ['rhyme', 'stats']:
+    # If not 'rhyme' or 'stats', we already printed what we needed to,
+    # or if invalid arg provided (word not set), then reloop
+    if (not parseResult in interact.COMMANDS[:interact.STATS_IDX] 
+        or interact.USER_WORD)  == '':
         continue
 
     # Otherwise, determine what behavior to run
@@ -63,12 +65,16 @@ while True:
                         interact.USER_WORD))
                 continue
 
-            # otherwise print each word
+            # otherwise print each rhyme for pronunciation
             print(interact.RHYMES_FOUND.format(interact.USER_RHYME_TYPE,
-                    i, interact.USER_WORD), ", ".join(rhymes), "\n")
+                    i, interact.USER_WORD, "".join(pronunciations[i])), 
+                    ", ".join(rhymes), "\n")
 
     if parseResult == 'stats':
         print(3)
+
+    # Reset user word
+    interact.USER_WORD = ''
 
 # Exit Script
 print(interact.EXIT)

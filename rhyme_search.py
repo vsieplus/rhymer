@@ -80,14 +80,14 @@ def rhyme_type_to_func(rtype):
     """Switch statement for determining behavior depending on specified
         type of rhyme"""
     type_dict = {
-        interact.TYPES[interact.PERFECT_IDX]: perfect,
-        interact.TYPES[interact.NEAR_IDX]: near,
-        interact.TYPES[interact.SYLLABIC_IDX]: syllabic,
-        interact.TYPES[interact.SEMI_IDX]: semi,
-        interact.TYPES[interact.PARA_IDX]: para,
-        interact.TYPES[interact.ASSON_IDX]: asson,
-        interact.TYPES[interact.ID_IDX]: identical,
-        interact.TYPES[interact.EYE_IDX]: eye,
+        interact.R_TYPES[interact.PERFECT_IDX]: perfect,
+        interact.R_TYPES[interact.NEAR_IDX]: near,
+        interact.R_TYPES[interact.SYLLABIC_IDX]: syllabic,
+        interact.R_TYPES[interact.SEMI_IDX]: semi,
+        interact.R_TYPES[interact.PARA_IDX]: para,
+        interact.R_TYPES[interact.ASSON_IDX]: asson,
+        interact.R_TYPES[interact.ID_IDX]: identical,
+        interact.R_TYPES[interact.EYE_IDX]: eye,
     }
 
     return type_dict.get(rtype)

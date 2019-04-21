@@ -19,7 +19,7 @@ INVALID_TYPE = "\n\tInvalid rhyme type {}\n"
 PROMPT = ">> "
 WORD_NOT_FOUND = "\n\t Word {} not found.\n"
 RHYMES_NOT_FOUND = "\n\t No {} rhymes found for the word {}. :(\n"
-RHYMES_FOUND = "\n\t {} rhymes for pronunciation {} of {}:"
+RHYMES_FOUND = "\n\t {} rhymes for pronunciation {} of '{}' (IPA/ARPABET: {}):"
 
 CMD_IDX = 0
 WORD_IDX = 1
@@ -27,7 +27,7 @@ TYPE_IDX = 2
 
 WELCOME = "\nWelcome to Rhymer! It's time to rhyme!"
 HELP = """\nUsage:
-        \trhyme <word> <type>   : Display rhymes for a word of the given type
+        \trhyme <word> (<type>) : Display rhymes for a word of the given type (Default type is 'perfect')
         \tstats <word>          : Display overall stats for a word
         \trhymeTypes            : Display different types of rhymes with examples
         \trhymeTypes2           : Display different types of rhymes with examples
@@ -36,8 +36,8 @@ HELP = """\nUsage:
 EXIT = "Is it already time? Well thanks for the rhymes!"
 
 # Rhyme Types with examples
-TYPES = ['perfect', 'near', 'syllabic', 'semi', 'para', 'assonance',
-         'identical', 'eye']
+R_TYPES = ['perfect', 'near', 'syllabic', 'semi', 'para', 'assonance',
+           'identical', 'eye']
 PERFECT_IDX = 0
 NEAR_IDX = 1
 SYLLABIC_IDX = 2
@@ -86,17 +86,20 @@ def parse_word(parsedCmd):
 
     if cmd == COMMANDS[RHYME_IDX]:
         # Check for incorrect args
-        if(len(parsedCmd) != 3):
+        if len(parsedCmd) < 2 or len(parsedCmd) > 4:
             return WRONG_ARGS.format(cmd)
 
-        # Make sure valid rhyme type given
-        if(not parsedCmd[TYPE_IDX] in TYPES):
-            return INVALID_TYPE.format(parsedCmd[TYPE_IDX])
+        # Make sure valid rhyme type given, if any, or set default (perfect)
+        if len(parsedCmd) == 3:
+            if(not parsedCmd[TYPE_IDX] in R_TYPES):
+                return INVALID_TYPE.format(parsedCmd[TYPE_IDX])
+            USER_RHYME_TYPE = parsedCmd[TYPE_IDX]
+        else:
+            USER_RHYME_TYPE = R_TYPES[PERFECT_IDX]
 
-        # Otherwise, set word + type and return corresponding string
+        # Otherwise, set word return corresponding string
         USER_WORD = parsedCmd[WORD_IDX]
-        USER_RHYME_TYPE = parsedCmd[TYPE_IDX]
-        return SEARCHING.format(parsedCmd[TYPE_IDX], parsedCmd[WORD_IDX])
+        return SEARCHING.format(USER_RHYME_TYPE, parsedCmd[WORD_IDX])
     elif cmd == COMMANDS[STATS_IDX]:
         # Same thing
         if(len(parsedCmd) != 2):
