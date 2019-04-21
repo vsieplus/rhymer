@@ -20,6 +20,10 @@ class TestRhymeSearch(unittest.TestCase):
         self.assertEqual(rhyme_search.stress(['F', 'AY1', 'R']), ['1'])
         self.assertEqual(rhyme_search.stress(['AY1', 'V', 'IH0', 'N']), ['1', '0'])
 
+    def test_rhymes_by_syllable(self):
+        self.assertEqual(rhyme_search.rhymes_by_syllable([('fire', ['F', 'AY1', 'R'], 1), 
+                            ('tire', ['T', 'AY1', 'R'], 1), ('ivan', ['AY1', 'V', 'IH0', 'N'], 2)]),
+                            [['fire', 'tire'], ['ivan']])
 
 if __name__ == '__main__':
     unittest.main()

@@ -51,7 +51,7 @@ def stress(pron):
     return [char for phone in pron for char in phone if char.isdigit()]
 
 # Helper function to determine number of syllables
-def num_syllalbes(pron):
+def num_syllables(pron):
     return len(stress(pron))
 
 # Functions to search for various rhymes 
@@ -111,9 +111,10 @@ def rhyme_type_to_func(rtype):
 # corresponds to rhymes containing a certain number of syllables
 def rhymes_by_syllable(rhymes):
     # First sort tuples by number of syllables
-    sorted_rhymes = sorted(rhymes, key = lambda rhyme: rhyme[2]))
+    sorted_rhymes = sorted(rhymes, key = lambda rhyme: rhyme[2])
 
     # Return list of lists of words, each list containing words of the same
     # number of syllables
-    return [[word if numSyll == i] for i in range(sorted_rhymes[-1][2]) 
-                                   for word,pron,numSyll in sorted_rhymes]
+    return [[word for word,pron,numSyll in sorted_rhymes if numSyll == i + 1] 
+            for i in range(sorted_rhymes[-1][2])]
+                   

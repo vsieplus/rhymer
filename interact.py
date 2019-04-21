@@ -18,8 +18,8 @@ INVALID_TYPE = "\n\tInvalid rhyme type {}\n"
 PROMPT = ">> "
 WORD_NOT_FOUND = "\t Word {} not found.\n"
 RHYMES_NOT_FOUND = "\t No {} rhymes found for the word {}. :(\n"
-RHYMES_FOUND = "\t {} rhymes for pronunciation {} of '{}' (IPA/ARPABET: {}):"
-SYLLABLE_RHYME = "\t{} syllables:"
+RHYMES_FOUND = "{} rhymes for pronunciation {} of '{}' (IPA/ARPABET: {}):\n"
+SYLLABLE_RHYME = "{} syllables:"
 
 CMD_IDX = 0
 WORD_IDX = 1

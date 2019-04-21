@@ -56,11 +56,11 @@ while True:
             continue
 
         # Retrieve the appropriate rhyming function
-        rhyme_search = rhyme_search.rhyme_type_to_func(interact.USER_RHYME_TYPE)
+        rhyme_finder = rhyme_search.rhyme_type_to_func(interact.USER_RHYME_TYPE)
 
         # For each pronunciation, search for rhymes, printing results
         for i in range(len(pronunciations)):
-            rhymes = rhyme_search(pronunciations[i])
+            rhymes = rhyme_finder(pronunciations[i])
 
             # if none found
             if rhymes == []:
@@ -70,14 +70,14 @@ while True:
 
             # otherwise print each rhyme for pronunciation
             print(interact.RHYMES_FOUND.format(interact.USER_RHYME_TYPE,
-                    i, interact.USER_WORD, "".join(pronunciations[i])))
+                    i + 1, interact.USER_WORD, "".join(pronunciations[i])))
 
             # Print according to number of syllables
             syllable_rhymes = rhyme_search.rhymes_by_syllable(rhymes)
 
             for j in range(len(syllable_rhymes)):
-                print(interact.SYLLALBE_RHYME.format(j), 
-                      ", ".join(syllable_rhymes[j]))
+                print(interact.SYLLABLE_RHYME.format(j + 1), 
+                      ", ".join(syllable_rhymes[j]), "\n")
 
 
     if parseResult == 'stats':
