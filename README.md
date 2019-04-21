@@ -3,7 +3,7 @@ A rhyming dictionary! (using NLTK)
 
 A mini Python project implementing a rhyming dictionary using the CMU 
 pronunciation dictionary corpus available in NLTK. It uses ARBAPET to encode
-IPA phonemes (https://en.wikipedia.org/wiki/ARPABET).
+IPA sounds (https://en.wikipedia.org/wiki/ARPABET).
 
 Partly inspired by the phonetics class I took, and how amazing languages sound.
 

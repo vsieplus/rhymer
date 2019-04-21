@@ -75,7 +75,7 @@ def identical(pron):
 def eye(pron):
     return 0
 
-# Switch statement to retrieve
+# Switch statement to retrieve correct rhyme_search function
 def rhyme_type_to_func(rtype):
     """Switch statement for determining behavior depending on specified
         type of rhyme"""
