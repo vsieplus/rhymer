@@ -17,7 +17,7 @@ INVALID_TYPE = "\n\tInvalid rhyme type {}\n"
 
 PROMPT = ">> "
 WORD_NOT_FOUND = "\t Word {} not found.\n"
-RHYMES_NOT_FOUND = "\t No {} rhymes found for the word {}. :(\n"
+RHYMES_NOT_FOUND = "\t No {} rhymes found for the word '{}' (IPA/ARPABET: {}) :(\n"
 RHYMES_FOUND = "{} rhymes for pronunciation {} of '{}' (IPA/ARPABET: {}):\n"
 SYLLABLE_RHYME = "{} syllables:"
 

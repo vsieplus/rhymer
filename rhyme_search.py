@@ -66,7 +66,8 @@ def perfect(pron):
     stressed_syllable = pron[stress_idx[0]:]
 
     return [(word,phon, num_syllables(phon)) for word,phon in setup.ENTRIES
-                if phon[-len(stressed_syllable):] == stressed_syllable]
+                if phon[-len(stressed_syllable):] == stressed_syllable and
+                   phon != pron]
 
 def near(pron):
     return 0
@@ -115,6 +116,6 @@ def rhymes_by_syllable(rhymes):
 
     # Return list of lists of words, each list containing words of the same
     # number of syllables
-    return [[word for word,pron,numSyll in sorted_rhymes if numSyll == i + 1] 
+    return [set([word for word,pron,numSyll in sorted_rhymes 
+                    if numSyll == i + 1])
             for i in range(sorted_rhymes[-1][2])]
-                   
