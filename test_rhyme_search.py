@@ -16,5 +16,10 @@ class TestRhymeSearch(unittest.TestCase):
                       ['F', 'AY1', 'R', 'T', 'R', 'AH1', 'K']])
         self.assertIsNone(rhyme_search.word_to_pron("2q6493r7fdhq2fj"))
 
+    def test_stress(self):
+        self.assertEqual(rhyme_search.stress(['F', 'AY1', 'R']), ['1'])
+        self.assertEqual(rhyme_search.stress(['AY1', 'V', 'IH0', 'N']), ['1', '0'])
+
+
 if __name__ == '__main__':
     unittest.main()

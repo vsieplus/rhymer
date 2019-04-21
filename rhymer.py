@@ -43,15 +43,18 @@ while True:
 
     # If not 'rhyme' or 'stats', we already printed what we needed to,
     # or if invalid arg provided (word not set), then reloop
-    if (not parseResult in interact.COMMANDS[:interact.STATS_IDX] 
-        or interact.USER_WORD)  == '':
+    if (not (parseResult in interact.COMMANDS[:interact.STATS_IDX] and 
+             interact.USER_WORD)):
         continue
 
     # Otherwise, determine what behavior to run
-    if parseResult == 'rhyme':
+    if parseResult == interact.COMMANDS[interact.RHYME_IDX]:
         # Extract pronunciation
         pronunciations = rhyme_search.word_to_pron(interact.USER_WORD)
-        
+
+        if pronunciations is None:
+            continue
+
         # Retrieve the appropriate rhyming function
         rhyme_search = rhyme_search.rhyme_type_to_func(interact.USER_RHYME_TYPE)
 
@@ -67,8 +70,15 @@ while True:
 
             # otherwise print each rhyme for pronunciation
             print(interact.RHYMES_FOUND.format(interact.USER_RHYME_TYPE,
-                    i, interact.USER_WORD, "".join(pronunciations[i])), 
-                    ", ".join(rhymes), "\n")
+                    i, interact.USER_WORD, "".join(pronunciations[i])))
+
+            # Print according to number of syllables
+            syllable_rhymes = rhyme_search.rhymes_by_syllable(rhymes)
+
+            for j in range(len(syllable_rhymes)):
+                print(interact.SYLLALBE_RHYME.format(j), 
+                      ", ".join(syllable_rhymes[j]))
+
 
     if parseResult == 'stats':
         print(3)

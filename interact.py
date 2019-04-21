@@ -15,11 +15,11 @@ UNRECOGNIZED_COMMAND = "\n\t Unrecognized Command {}.\n"
 WRONG_ARGS  = "\n\tCommand {} used with incorrect number of args. (See 'help')\n"
 INVALID_TYPE = "\n\tInvalid rhyme type {}\n"
 
-
 PROMPT = ">> "
-WORD_NOT_FOUND = "\n\t Word {} not found.\n"
-RHYMES_NOT_FOUND = "\n\t No {} rhymes found for the word {}. :(\n"
-RHYMES_FOUND = "\n\t {} rhymes for pronunciation {} of '{}' (IPA/ARPABET: {}):"
+WORD_NOT_FOUND = "\t Word {} not found.\n"
+RHYMES_NOT_FOUND = "\t No {} rhymes found for the word {}. :(\n"
+RHYMES_FOUND = "\t {} rhymes for pronunciation {} of '{}' (IPA/ARPABET: {}):"
+SYLLABLE_RHYME = "\t{} syllables:"
 
 CMD_IDX = 0
 WORD_IDX = 1
@@ -33,7 +33,7 @@ HELP = """\nUsage:
         \trhymeTypes2           : Display different types of rhymes with examples
         \thelp                  : Display this message
         \tquit                  : Stop rhyming"""
-EXIT = "Is it already time? Well thanks for the rhymes!"
+EXIT = "\nIs it already time? Well thanks for the rhymes!"
 
 # Rhyme Types with examples
 R_TYPES = ['perfect', 'near', 'syllabic', 'semi', 'para', 'assonance',
@@ -83,6 +83,9 @@ USER_RHYME_TYPE = ''
 def parse_word(parsedCmd):
     """ Ensure that correct arguments are used with 'rhyme' and 'stats'"""
     cmd = parsedCmd[CMD_IDX]
+
+    global USER_RHYME_TYPE
+    global USER_WORD
 
     if cmd == COMMANDS[RHYME_IDX]:
         # Check for incorrect args

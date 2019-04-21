@@ -46,13 +46,27 @@ def word_to_pron(word):
 
     return pronunciations 
 
+# Helper function to determine stress pattern of a pronunciation
+def stress(pron):
+    return [char for phone in pron for char in phone if char.isdigit()]
+
+# Helper function to determine number of syllables
+def num_syllalbes(pron):
+    return len(stress(pron))
+
 # Functions to search for various rhymes 
 # Each takes a pronunciation given as a list of phones and 
-# returns a list of words (in English orthography) for the given rhyme type
+# returns a list of pairs, (word, pron) for words fitting the given rhyme 
 
+# A perfect rhyme occurs when the final stressed syllable vowel and all
+# subsequent sounds are identical (i.e. smile ~ file)
 def perfect(pron):
-    """Find perfect rhymes for the given pronunciation"""
-    return 0
+    # Locate stressed syllable, and declare sounds we want to match
+    stress_idx = [i for i in range(len(pron)) for char in pron[i] if char == '1']
+    stressed_syllable = pron[stress_idx[0]:]
+
+    return [(word,phon, num_syllables(phon)) for word,phon in setup.ENTRIES
+                if phon[-len(stressed_syllable):] == stressed_syllable]
 
 def near(pron):
     return 0
@@ -91,3 +105,15 @@ def rhyme_type_to_func(rtype):
     }
 
     return type_dict.get(rtype)
+
+# Helper function to take a list of rhyme pairs, and sort them by 
+# number of syllables. Returns a list of lists, where each inner list
+# corresponds to rhymes containing a certain number of syllables
+def rhymes_by_syllable(rhymes):
+    # First sort tuples by number of syllables
+    sorted_rhymes = sorted(rhymes, key = lambda rhyme: rhyme[2]))
+
+    # Return list of lists of words, each list containing words of the same
+    # number of syllables
+    return [[word if numSyll == i] for i in range(sorted_rhymes[-1][2]) 
+                                   for word,pron,numSyll in sorted_rhymes]
