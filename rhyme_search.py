@@ -4,6 +4,7 @@
 
 import setup 
 import interact
+import re
 
 # Extract pronunciation(s) for a word/phrase
 def word_to_pron(word):
@@ -54,23 +55,63 @@ def stress(pron):
 def num_syllables(pron):
     return len(stress(pron))
 
+# Helper function to determine index of primary stress in a pronunciation
+# Returns index if found, or -1 if no primary stress present
+def primary_stress_idx(pron):
+    for i in range(len(pron)):
+        for char in pron[i]:
+            if char == '1':
+                return i
+
+    return -1
+
+# Helper function to return an unstressed version of the given sounds
+def unstressed(sounds):
+    unstressed_sounds = []
+    for phon in sounds:
+        unstressed_sounds.append(re.sub('[1-9]', '0', phon))
+
+    return unstressed_sounds
+
 # Functions to search for various rhymes 
 # Each takes a pronunciation given as a list of phones and 
-# returns a list of pairs, (word, pron) for words fitting the given rhyme 
+# returns a list of tuples, (word, pron, numSyll) for words for the given rhyme 
+
+# Helper function to return list of tuples of rhymes matching the given sounds
+# Takes in a list of sounds to match (ARPABET) + original pronunciation, 
+# and returns the list of matching tuples
+def match_sounds(sounds, pron):
+    return [(word,phon, num_syllables(phon)) for word,phon in setup.ENTRIES
+                if phon[-len(sounds):] == sounds and phon != pron]
 
 # A perfect rhyme occurs when the final stressed syllable vowel and all
 # subsequent sounds are identical (i.e. smile ~ file)
 def perfect(pron):
     # Locate stressed syllable, and declare sounds we want to match
-    stress_idx = [i for i in range(len(pron)) for char in pron[i] if char == '1']
-    stressed_syllable = pron[stress_idx[0]:]
+    post_stress_sounds = pron[primary_stress_idx(pron):]
 
-    return [(word,phon, num_syllables(phon)) for word,phon in setup.ENTRIES
-                if phon[-len(stressed_syllable):] == stressed_syllable and
-                   phon != pron]
-
+    # Return tuples of words whose ending matches all sounds following 
+    # the stressed syllable
+    return match_sounds(post_stress_sounds, pron)
+    
+# A near rhyme occurs between a stressed and unstressed syllable 
+# (i.e. wing ~ caring)
 def near(pron):
-    return 0
+    rhymes = []
+
+    # Find near rhymes using primary stress of given pron
+    prim_syllable_idx = primary_stress_idx(pron)
+
+    # If primary stress exists
+    if prim_syllable_idx != -1:
+        # Retrieve unstressed version of sounds to match
+        post_stress_sounds = unstressed(pron[prim_syllable_idx:])
+
+        rhymes = rhymes + match_sounds(post_stress_sounds, pron)
+
+    # Find near rhymes using unstressed syllables of given pron
+
+    return rhymes
 
 def syllabic(pron):
     return 0
@@ -108,14 +149,14 @@ def rhyme_type_to_func(rtype):
     return type_dict.get(rtype)
 
 # Helper function to take a list of rhyme pairs, and sort them by 
-# number of syllables. Returns a list of lists, where each inner list
+# number of syllables. Returns a list of sets, where each inner set
 # corresponds to rhymes containing a certain number of syllables
 def rhymes_by_syllable(rhymes):
     # First sort tuples by number of syllables
     sorted_rhymes = sorted(rhymes, key = lambda rhyme: rhyme[2])
 
-    # Return list of lists of words, each list containing words of the same
-    # number of syllables
+    # Return list of set of words, each set containing words of the same
+    # number of syllables, for 1 <= numSyll <= max(rhymes.numSyll)
     return [set([word for word,pron,numSyll in sorted_rhymes 
                     if numSyll == i + 1])
             for i in range(sorted_rhymes[-1][2])]
