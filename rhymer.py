@@ -77,9 +77,12 @@ while True:
             syllable_rhymes = rhyme_search.rhymes_by_syllable(rhymes)
 
             for j in range(len(syllable_rhymes)):
-                print(interact.SYLLABLE_RHYME.format(j + 1), 
-                      ", ".join(syllable_rhymes[j]), "\n")
-
+                if(not syllable_rhymes[j]):
+                    print(interact.SYLLABLE_RHYME.format(j + 1), 
+                          "[None]", "\n")
+                else:
+                    print(interact.SYLLABLE_RHYME.format(j + 1), 
+                          ", ".join(syllable_rhymes[j]), "\n")
 
     if parseResult == 'stats':
         print(3)
