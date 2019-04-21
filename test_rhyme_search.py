@@ -27,8 +27,11 @@ class TestRhymeSearch(unittest.TestCase):
                             ('tire', ['T', 'AY1', 'R'], 1), ('ivan', ['AY1', 'V', 'IH0', 'N'], 2)]),
                             [{'fire', 'tire'}, {'ivan'}])
 
-    def test_unstressed(self):
-        self.assertEqual(rhyme_search.unstressed(fire_pron), ['F', 'AY0', 'ER0'])
+    def test_stressify(self):
+        self.assertEqual(rhyme_search.stressify(fire_pron, rhyme_search.UNSTRESSED), 
+                            ['F', 'AY0', 'ER0'])
+        self.assertEqual(rhyme_search.stressify(fire_pron, rhyme_search.PRIMARY_STRESS),
+                            ['F', 'AY1', 'ER1'])
 
 
     # Test rhyme searches

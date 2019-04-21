@@ -6,6 +6,11 @@ import setup
 import interact
 import re
 
+# Stress constants
+UNSTRESSED = '0'
+PRIMARY_STRESS = '1'
+SECONDARY_STRESS = '2'
+
 # Extract pronunciation(s) for a word/phrase
 def word_to_pron(word):
     """Function to take a given word (in English spelling), and return its
@@ -55,30 +60,33 @@ def stress(pron):
 def num_syllables(pron):
     return len(stress(pron))
 
-# Helper function to determine index of primary stress in a pronunciation
+# Helper function to determine index of first specified stress in a pronunciation
+# Takes in a pronunciation (list of phones), and a stress character:
+# '0' - unstressed || '1' - primary || '2' - secondary || ... 
 # Returns index if found, or -1 if no primary stress present
-def primary_stress_idx(pron):
+def stress_idx(pron, stress):
     for i in range(len(pron)):
         for char in pron[i]:
-            if char == '1':
+            if char == stress:
                 return i
 
     return -1
 
-# Helper function to return an unstressed version of the given sounds
-def unstressed(sounds):
-    unstressed_sounds = []
+# Helper function to return an stressed version of the given sounds, based
+# on the given stress
+def stressify(sounds, stress):
+    stressed_sounds = []
     for phon in sounds:
-        unstressed_sounds.append(re.sub('[1-9]', '0', phon))
+        stressed_sounds.append(re.sub('[0-9]', stress, phon))
 
-    return unstressed_sounds
+    return stressed_sounds
 
 # Functions to search for various rhymes 
 # Each takes a pronunciation given as a list of phones and 
 # returns a list of tuples, (word, pron, numSyll) for words for the given rhyme 
 
-# Helper function to return list of tuples of rhymes matching the given sounds
-# Takes in a list of sounds to match (ARPABET) + original pronunciation, 
+# Helper function to return list of tuples of rhymes matching the given final 
+# sounds. Takes in a list of sounds to match (ARPABET) + original pronunciation, 
 # and returns the list of matching tuples
 def match_sounds(sounds, pron):
     return [(word,phon, num_syllables(phon)) for word,phon in setup.ENTRIES
@@ -88,28 +96,47 @@ def match_sounds(sounds, pron):
 # subsequent sounds are identical (i.e. smile ~ file)
 def perfect(pron):
     # Locate stressed syllable, and declare sounds we want to match
-    post_stress_sounds = pron[primary_stress_idx(pron):]
+    post_stress_sounds = pron[stress_idx(pron, PRIMARY_STRESS):]
 
     # Return tuples of words whose ending matches all sounds following 
     # the stressed syllable
     return match_sounds(post_stress_sounds, pron)
     
 # A near rhyme occurs between a stressed and unstressed syllable 
-# (i.e. wing ~ caring)
+# (i.e. caring ~ wing, turing ~ fluttering)
 def near(pron):
     rhymes = []
 
     # Find near rhymes using primary stress of given pron
-    prim_syllable_idx = primary_stress_idx(pron)
+    prim_sound_idx = stress_idx(pron, PRIMARY_STRESS)
+
+    # Calculate initial unstressed index
+    unstressed_sound_idx = stress_idx(pron, UNSTRESSED)
 
     # If primary stress exists
-    if prim_syllable_idx != -1:
+    if prim_sound_idx != -1:
         # Retrieve unstressed version of sounds to match
-        post_stress_sounds = unstressed(pron[prim_syllable_idx:])
+        post_stress_sounds = stressify(pron[prim_sound_idx:], UNSTRESSED)
 
         rhymes = rhymes + match_sounds(post_stress_sounds, pron)
 
-    # Find near rhymes using unstressed syllables of given pron
+        # Use only unstressed syllables after primary stress if exists
+        if(len(post_stress_sounds) > 1):
+            unstressed_sound_idx = stress_idx(post_stress_sounds[1:], 
+                                              UNSTRESSED)
+    else:
+        # Reset primary index to search for unstressed near rhymes below
+        prim_sound_idx = 0
+
+    # If unstressed syllables do exist after primary stress or w/out primary
+    # stress at all, find near rhymes using the unstressed syll. of given pron
+    if unstressed_sound_idx != -1:
+        # Retrieve stressed version of sounds to match
+        post_stressless_sounds = pron[(prim_sound_idx + unstressed_sound_idx):]
+        post_stressless_sounds = stressify(post_stressless_sounds, 
+                                           PRIMARY_STRESS)
+
+        rhymes = rhymes + match_sounds(post_stressless_sounds, pron)
 
     return rhymes
 
