@@ -34,9 +34,13 @@ class TestRhymeSearch(unittest.TestCase):
         self.assertEqual(rhyme_search.stressify(fire_pron, rhyme_search.PRIMARY_STRESS),
                             ['F', 'AY1', 'ER1'])
 
-    def test_consonants(self):
-        self.assertEqual(rhyme_search.consonants(fire_pron2), ['F', 'R'])
-        self.assertEqual(rhyme_search.consonants(['T', 'AY1', 'R']), ['T', 'R'])
+    def test_sound_pattern(self):
+        self.assertEqual(rhyme_search.sound_pattern(fire_pron2, 
+                         rhyme_search.ARPABET_CONSONANTS), ['F', '', 'R'])
+        self.assertEqual(rhyme_search.sound_pattern(['F', 'AY', 'ER'],
+                         rhyme_search.ARPABET_VOWELS), ['', 'AY', 'ER'])
+        self.assertEqual(rhyme_search.sound_pattern(['T', 'AY', 'R'], 
+                         rhyme_search.ARPABET_CONSONANTS), ['T', '', 'R'])
 
     # Test rhyme searches
     def test_perfect_rhymes(self):

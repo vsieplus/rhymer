@@ -154,15 +154,19 @@ def syllabic(pron):
 def semi(pron):
     return 0
 
-# Helper function to extract consonants from a list of sounds
-def consonants(pron):
-    return [phon for phon in pron if phon in ARPABET_CONSONANTS]
+# Helper function to return the specified pattern of sounds in SOUNDS from pron
+def sound_pattern(pron, SOUNDS):
+    return [phon if phon in SOUNDS else '' for phon in pron]
 
-# A pararhyme occurs when all consonants in two words match 
+# A pararhyme occurs when two words have same consonant pattern
 # (i.e. tall ~ tell)
 def para(pron):
+    cnsnt_pattern = sound_pattern(pron, ARPABET_CONSONANTS)
+
+    # Find words with same consonant pattern and 
     return [(word, phon, num_syllables(phon)) for word,phon in setup.ENTRIES
-                if consonants(phon) == consonants(pron) and phon != pron]
+                if sound_pattern(phon, ARPABET_CONSONANTS) == cnsnt_pattern and 
+                phon != pron]
 
 def asson(pron):
     return 0
