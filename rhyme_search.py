@@ -7,9 +7,17 @@ import interact
 import re
 
 # Stress constants
+EMPTY_STRESS = ''
 UNSTRESSED = '0'
 PRIMARY_STRESS = '1'
 SECONDARY_STRESS = '2'
+
+# ARPABET SYMBOLS
+ARPABET_CONSONANTS = ['B', 'CH', 'D', 'DH', 'DX', 'EM', 'EN', 'EL', 'F', 'G'
+                      'HH', 'H', 'JH', 'K', 'L', 'M', 'N', 'NX', 'NG', 'P', 'Q',
+                      'R', 'S', 'SH', 'T', 'TH', 'V', 'W', 'WH', 'Y', 'Z', 'ZH']
+ARPABET_VOWELS = ['AA', 'AE', 'AH', 'AO', 'AW', 'AX', 'AXR', 'AY', 'EH', 'ER',
+                  'EY', 'IH', 'IX', 'IY', 'OW', 'OY', 'UH', 'UW', 'UX']
 
 # Extract pronunciation(s) for a word/phrase
 def word_to_pron(word):
@@ -146,8 +154,15 @@ def syllabic(pron):
 def semi(pron):
     return 0
 
+# Helper function to extract consonants from a list of sounds
+def consonants(pron):
+    return [phon for phon in pron if phon in ARPABET_CONSONANTS]
+
+# A pararhyme occurs when all consonants in two words match 
+# (i.e. tall ~ tell)
 def para(pron):
-    return 0
+    return [(word, phon, num_syllables(phon)) for word,phon in setup.ENTRIES
+                if consonants(phon) == consonants(pron) and phon != pron]
 
 def asson(pron):
     return 0
