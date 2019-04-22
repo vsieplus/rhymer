@@ -22,12 +22,12 @@ RHYMES_FOUND = "{} rhymes for pronunciation {} of '{}' (IPA/ARPABET: {}):\n"
 SYLLABLE_RHYME = "{} syllables:"
 
 CMD_IDX = 0
-WORD_IDX = 1
-TYPE_IDX = 2
+WORD_IDX = 2
+TYPE_IDX = 0
 
 WELCOME = "\nWelcome to Rhymer! It's time to rhyme!"
 HELP = """\nUsage:
-        \trhyme <word> (<type>) : Display rhymes for a word of the given type (Default type is 'perfect')
+        \t(<type>) rhyme <word> : Display rhymes for a word of the given type (Default type is 'perfect')
         \tstats <word>          : Display overall stats for a word
         \trhymeTypes            : Display different types of rhymes with examples
         \trhymeTypes2           : Display different types of rhymes with examples
@@ -87,7 +87,9 @@ def parse_word(parsedCmd):
     global USER_RHYME_TYPE
     global USER_WORD
 
-    if cmd == COMMANDS[RHYME_IDX]:
+    # Check if rhyme
+    if (cmd == COMMANDS[RHYME_IDX] or 
+        (len(parsedCmd) > 1 and parsedCmd[1] == COMMANDS[RHYME_IDX])):
         # Check for incorrect args
         if len(parsedCmd) < 2 or len(parsedCmd) > 4:
             return WRONG_ARGS.format(cmd)
@@ -97,12 +99,15 @@ def parse_word(parsedCmd):
             if(not parsedCmd[TYPE_IDX] in R_TYPES):
                 return INVALID_TYPE.format(parsedCmd[TYPE_IDX])
             USER_RHYME_TYPE = parsedCmd[TYPE_IDX]
+            USER_WORD = parsedCmd[WORD_IDX]
+        elif parsedCmd[1] == COMMANDS[RHYME_IDX]:
+                return WRONG_ARGS.format(parsedCmd[1])
         else:
             USER_RHYME_TYPE = R_TYPES[PERFECT_IDX]
+            USER_WORD = parsedCmd[WORD_IDX - 1]
 
-        # Otherwise, set word return corresponding string
-        USER_WORD = parsedCmd[WORD_IDX]
-        return SEARCHING.format(USER_RHYME_TYPE, parsedCmd[WORD_IDX])
+        # return corresponding string
+        return SEARCHING.format(USER_RHYME_TYPE, USER_WORD)
     elif cmd == COMMANDS[STATS_IDX]:
         # Same thing
         if(len(parsedCmd) != 2):
@@ -123,7 +128,11 @@ def commands_to_str(parsedCmd):
         COMMANDS[HELP_IDX]: HELP,
     }
 
-    print(switch.get(parsedCmd[CMD_IDX], 
-                     UNRECOGNIZED_COMMAND.format(parsedCmd[CMD_IDX])))
-
-    return parsedCmd[CMD_IDX]
+    # Check if parsing rhyme command with given type or not
+    if len(parsedCmd) > 1 and parsedCmd[1] == COMMANDS[RHYME_IDX]:
+        print(switch.get(parsedCmd[CMD_IDX + 1]))
+        return parsedCmd[1]
+    else:
+        print(switch.get(parsedCmd[CMD_IDX], 
+                         UNRECOGNIZED_COMMAND.format(parsedCmd[CMD_IDX])))
+        return parsedCmd[CMD_IDX]
