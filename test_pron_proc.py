@@ -29,6 +29,8 @@ class TestPronProc(unittest.TestCase):
                             ['F', 'AY0', 'ER0'])
         self.assertEqual(pron_proc.stressify(fire_pron, pron_proc.PRIMARY_STRESS),
                             ['F', 'AY1', 'ER1'])
+        self.assertEqual(pron_proc.stressify(fire_pron, pron_proc.EMPTY_STRESS),
+                            ['F', 'AY', 'ER'])
 
     def test_sound_pattern(self):
         self.assertEqual(pron_proc.sound_pattern(fire_pron2, 

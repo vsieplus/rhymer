@@ -82,10 +82,10 @@ def stress_idx(pron, stress):
 
 # Helper function to return an stressed version of the given sounds, based
 # on the given stress
-def stressify(sounds, stress):
+def stressify(sounds, STRESS):
     stressed_sounds = []
     for phon in sounds:
-        stressed_sounds.append(re.sub('[0-9]', stress, phon))
+        stressed_sounds.append(re.sub('[0-9]', STRESS, phon))
 
     return stressed_sounds
 

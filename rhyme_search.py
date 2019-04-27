@@ -18,6 +18,13 @@ def match_sounds(sounds, pron):
     return [(word,phon, pron_proc.num_syllables(phon)) for word,phon in setup.ENTRIES
                 if phon[-len(sounds):] == sounds and phon != pron]
 
+# Helper function to find words with the matching pattern of sounds
+def match_pattern(pattern, pattern_set, pron):
+    return [(word, phon, pron_proc.num_syllables(phon)) for word,phon in setup.ENTRIES
+                if pron_proc.sound_pattern(pron_proc.stressify(phon, pron_proc.EMPTY_STRESS),
+                    pattern_set) == pattern and phon != pron]
+
+
 # A perfect rhyme occurs when the final stressed syllable vowel and all
 # subsequent sounds are identical (i.e. smile ~ file)
 def perfect(pron):
@@ -79,12 +86,18 @@ def para(pron):
     cnsnt_pattern = pron_proc.sound_pattern(pron, pron_proc.ARPABET_CONSONANTS)
 
     # Find words with same consonant pattern and 
-    return [(word, phon, pron_proc.num_syllables(phon)) for word,phon in setup.ENTRIES
-                if pron_proc.sound_pattern(phon, pron_proc.ARPABET_CONSONANTS) == cnsnt_pattern 
-                and phon != pron]
+    return match_pattern(cnsnt_pattern, pron_proc.ARPABET_CONSONANTS, pron)
 
+# Assonance occurs when two words have the same vowel pattern
+# (i.e. bottle ~ nozzle)
 def asson(pron):
-    return 0
+    # Remove stress numbers from pronunciation
+    nostress_pron = pron_proc.stressify(pron, pron_proc.EMPTY_STRESS)
+
+    # Extract vowel pattern
+    vowel_pattern = pron_proc.sound_pattern(nostress_pron, pron_proc.ARPABET_VOWELS)
+
+    return match_pattern(vowel_pattern, pron_proc.ARPABET_VOWELS, pron)
 
 def identical(pron):
     return 0
