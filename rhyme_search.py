@@ -4,90 +4,8 @@
 
 import setup 
 import interact
+import pron_proc
 import re
-
-# Stress constants
-EMPTY_STRESS = ''
-UNSTRESSED = '0'
-PRIMARY_STRESS = '1'
-SECONDARY_STRESS = '2'
-
-# ARPABET SYMBOLS
-ARPABET_CONSONANTS = ['B', 'CH', 'D', 'DH', 'DX', 'EM', 'EN', 'EL', 'F', 'G'
-                      'HH', 'H', 'JH', 'K', 'L', 'M', 'N', 'NX', 'NG', 'P', 'Q',
-                      'R', 'S', 'SH', 'T', 'TH', 'V', 'W', 'WH', 'Y', 'Z', 'ZH']
-ARPABET_VOWELS = ['AA', 'AE', 'AH', 'AO', 'AW', 'AX', 'AXR', 'AY', 'EH', 'ER',
-                  'EY', 'IH', 'IX', 'IY', 'OW', 'OY', 'UH', 'UW', 'UX']
-
-# Extract pronunciation(s) for a word/phrase
-def word_to_pron(word):
-    """Function to take a given word (in English spelling), and return its
-       corresponding IPA pronunciation(s) (via ARPABET) if it exists. Otherwise
-       returns None"""
-
-    # If string given has multiple words, split
-    words = word.split()
-
-    # Try to search for pronunciations for each word
-    try:
-        word_prons = [[pron for pron in setup.PRON_DICT[w]] for w in words]
-    except KeyError:
-        # If no matching word was found
-        print(interact.WORD_NOT_FOUND.format(interact.USER_WORD))
-        return None 
-
-    # Create all possible concatenations of pronunciations
-    pronunciations = []
-
-    for pronlist in word_prons:
-        pronLen = len(pronunciations)
-    
-        if pronLen == 0:
-            for pron in pronlist:    
-                pronunciations.append(pron)
-            continue
-
-        # Check if we need to instantiate a new pronunciation
-        k = 0
-        while len(pronlist) * pronLen > len(pronunciations):
-            pronunciations.append(pronunciations[k])
-            k = k + 1
- 
-        # Concatenate each alternation
-        for i in (range(len(pronlist))):
-            for j in (range(len(pronunciations))):
-                pronunciations[j] = pronunciations[j] + pronlist[i]
-
-    return pronunciations 
-
-# Helper function to determine stress pattern of a pronunciation
-def stress(pron):
-    return [char for phone in pron for char in phone if char.isdigit()]
-
-# Helper function to determine number of syllables
-def num_syllables(pron):
-    return len(stress(pron))
-
-# Helper function to determine index of first specified stress in a pronunciation
-# Takes in a pronunciation (list of phones), and a stress character:
-# '0' - unstressed || '1' - primary || '2' - secondary || ... 
-# Returns index if found, or -1 if no primary stress present
-def stress_idx(pron, stress):
-    for i in range(len(pron)):
-        for char in pron[i]:
-            if char == stress:
-                return i
-
-    return -1
-
-# Helper function to return an stressed version of the given sounds, based
-# on the given stress
-def stressify(sounds, stress):
-    stressed_sounds = []
-    for phon in sounds:
-        stressed_sounds.append(re.sub('[0-9]', stress, phon))
-
-    return stressed_sounds
 
 # Functions to search for various rhymes 
 # Each takes a pronunciation given as a list of phones and 
@@ -97,14 +15,14 @@ def stressify(sounds, stress):
 # sounds. Takes in a list of sounds to match (ARPABET) + original pronunciation, 
 # and returns the list of matching tuples
 def match_sounds(sounds, pron):
-    return [(word,phon, num_syllables(phon)) for word,phon in setup.ENTRIES
+    return [(word,phon, pron_proc.num_syllables(phon)) for word,phon in setup.ENTRIES
                 if phon[-len(sounds):] == sounds and phon != pron]
 
 # A perfect rhyme occurs when the final stressed syllable vowel and all
 # subsequent sounds are identical (i.e. smile ~ file)
 def perfect(pron):
     # Locate stressed syllable, and declare sounds we want to match
-    post_stress_sounds = pron[stress_idx(pron, PRIMARY_STRESS):]
+    post_stress_sounds = pron[pron_proc.stress_idx(pron, pron_proc.PRIMARY_STRESS):]
 
     # Return tuples of words whose ending matches all sounds following 
     # the stressed syllable
@@ -116,22 +34,23 @@ def near(pron):
     rhymes = []
 
     # Find near rhymes using primary stress of given pron
-    prim_sound_idx = stress_idx(pron, PRIMARY_STRESS)
+    prim_sound_idx = pron_proc.stress_idx(pron, pron_proc.PRIMARY_STRESS)
 
     # Calculate initial unstressed index
-    unstressed_sound_idx = stress_idx(pron, UNSTRESSED)
+    unstressed_sound_idx = pron_proc.stress_idx(pron, pron_proc.UNSTRESSED)
 
     # If primary stress exists
     if prim_sound_idx != -1:
         # Retrieve unstressed version of sounds to match
-        post_stress_sounds = stressify(pron[prim_sound_idx:], UNSTRESSED)
+        post_stress_sounds = pron_proc.stressify(pron[prim_sound_idx:], 
+            pron_proc.UNSTRESSED)
 
         rhymes = rhymes + match_sounds(post_stress_sounds, pron)
 
         # Use only unstressed syllables after primary stress if exists
         if(len(post_stress_sounds) > 1):
-            unstressed_sound_idx = stress_idx(post_stress_sounds[1:], 
-                                              UNSTRESSED)
+            unstressed_sound_idx = pron_proc.stress_idx(post_stress_sounds[1:], 
+                                              pron_proc.UNSTRESSED)
     else:
         # Reset primary index to search for unstressed near rhymes below
         prim_sound_idx = 0
@@ -141,8 +60,8 @@ def near(pron):
     if unstressed_sound_idx != -1:
         # Retrieve stressed version of sounds to match
         post_stressless_sounds = pron[(prim_sound_idx + unstressed_sound_idx):]
-        post_stressless_sounds = stressify(post_stressless_sounds, 
-                                           PRIMARY_STRESS)
+        post_stressless_sounds = pron_proc.stressify(post_stressless_sounds, 
+                                           pron_proc.PRIMARY_STRESS)
 
         rhymes = rhymes + match_sounds(post_stressless_sounds, pron)
 
@@ -154,19 +73,15 @@ def syllabic(pron):
 def semi(pron):
     return 0
 
-# Helper function to return the specified pattern of sounds in SOUNDS from pron
-def sound_pattern(pron, SOUNDS):
-    return [phon if phon in SOUNDS else '' for phon in pron]
-
 # A pararhyme occurs when two words have same consonant pattern
 # (i.e. tall ~ tell)
 def para(pron):
-    cnsnt_pattern = sound_pattern(pron, ARPABET_CONSONANTS)
+    cnsnt_pattern = pron_proc.sound_pattern(pron, pron_proc.ARPABET_CONSONANTS)
 
     # Find words with same consonant pattern and 
-    return [(word, phon, num_syllables(phon)) for word,phon in setup.ENTRIES
-                if sound_pattern(phon, ARPABET_CONSONANTS) == cnsnt_pattern and 
-                phon != pron]
+    return [(word, phon, pron_proc.num_syllables(phon)) for word,phon in setup.ENTRIES
+                if pron_proc.sound_pattern(phon, pron_proc.ARPABET_CONSONANTS) == cnsnt_pattern 
+                and phon != pron]
 
 def asson(pron):
     return 0

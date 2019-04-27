@@ -10,6 +10,7 @@ Usage: python rhymer.py
 import sys
 import interact
 import rhyme_search
+import pron_proc
 import stats_search
 
 # Ensure correct command line usage
@@ -50,7 +51,7 @@ while True:
     # Otherwise, determine what behavior to run
     if parseResult == interact.COMMANDS[interact.RHYME_IDX]:
         # Extract pronunciation
-        pronunciations = rhyme_search.word_to_pron(interact.USER_WORD)
+        pronunciations = pron_proc.word_to_pron(interact.USER_WORD)
 
         if pronunciations is None:
             continue

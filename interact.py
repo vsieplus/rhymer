@@ -61,9 +61,9 @@ RHYME_TYPES = """\nRhyme Types:\n
 \t 'store'  ~  'forecast'"""
 
 RHYME_TYPES2 = """\nMore Rhyme Types:\n
-'para'      - rhyme in which all consonants match\n
+'para'      - rhyme in which the consonant patterns of both words match\n
 \t  'love'  ~  'live'\n
-'assonance' - all vowels in a word match\n
+'assonance' - rhyme in which the vowel patterns of both words match\n
 \t'bottle'  ~  'nozzle'\n
 'identical' - perfect rhyme in which the onset of the stressed syllable
               also matches\n
