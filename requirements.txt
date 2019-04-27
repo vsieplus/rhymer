@@ -1,6 +1,4 @@
 Developed, tested on Python version 3.6.7.
 
 Packages used:
-	NLTK - install using `pip install nltk` (Mac/UNIX) or 
-						  http://pypi.python.org/nltk (Windows)
-	
+	NLTK - https://www.nltk.org/install.html
