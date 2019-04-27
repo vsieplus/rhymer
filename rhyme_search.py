@@ -131,6 +131,6 @@ def rhymes_by_syllable(rhymes):
 
     # Return list of set of words, each set containing words of the same
     # number of syllables, for 1 <= numSyll <= max(rhymes.numSyll)
-    return [set([word for word,pron,numSyll in sorted_rhymes 
-                    if numSyll == i + 1])
+    return [sorted(set([word for word,pron,numSyll in sorted_rhymes 
+                if numSyll == i + 1]))
             for i in range(sorted_rhymes[-1][2])]
