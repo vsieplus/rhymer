@@ -74,8 +74,21 @@ def near(pron):
 
     return rhymes
 
+# Syllabic rhyme - final syllables match, but unstressed
 def syllabic(pron):
-    return 0
+    # Check if last syllable unstressed
+    stress_pattern = pron_proc.stress(pron)
+
+    if stress_pattern[-1] != pron_proc.UNSTRESSED:
+        return []
+
+    # Locate unstressed syllable, and declare sounds we want to match
+    final_syll = pron[pron_proc.stress_idx(pron, pron_proc.UNSTRESSED, 
+                      len(stress_pattern) - 1):]
+
+    # Return tuples of words whose ending matches all sounds following 
+    # the stressed syllable
+    return match_sounds(final_syll, pron)
 
 def semi(pron):
     return 0

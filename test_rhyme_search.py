@@ -13,7 +13,7 @@ class TestRhymeSearch(unittest.TestCase):
     def test_rhymes_by_syllable(self):
         self.assertEqual(rhyme_search.rhymes_by_syllable([('fire', fire_pron2, 1), 
                             ('tire', ['T', 'AY1', 'R'], 1), ('ivan', ['AY1', 'V', 'IH0', 'N'], 2)]),
-                            [{'fire', 'tire'}, {'ivan'}])
+                            [['fire', 'tire'], ['ivan']])
 
     # Test rhyme searches
     def test_perfect_rhymes(self):
@@ -27,7 +27,13 @@ class TestRhymeSearch(unittest.TestCase):
         return 0
 
     def test_syllabic_rhymes(self):
-        return 0
+        fire_rhymes = [('later', ['L', 'EY1', 'T', 'ER0'], 2),
+                       ('cater', ['K', 'EY1', 'T', 'ER0'], 2),
+                       ('scooter', ['S', 'K', 'UW1', 'T', 'ER0'], 2)]
+        for rhyme in fire_rhymes:
+            self.assertIn(rhyme, rhyme_search.syllabic(fire_pron))
+
+        self.assertFalse(rhyme_search.syllabic(['K', 'R', 'IY0', 'EY1', 'T']))
 
     def test_semi_rhymes(self):
         return 0

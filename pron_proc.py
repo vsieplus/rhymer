@@ -68,15 +68,18 @@ def stress(pron):
 def num_syllables(pron):
     return len(stress(pron))
 
-# Helper function to determine index of first specified stress in a pronunciation
+# Helper function to determine index of nth specified stress in a pronunciation
 # Takes in a pronunciation (list of phones), and a stress character:
 # '0' - unstressed || '1' - primary || '2' - secondary || ... 
 # Returns index if found, or -1 if no primary stress present
-def stress_idx(pron, stress):
+def stress_idx(pron, stress, n = 1):
     for i in range(len(pron)):
         for char in pron[i]:
             if char == stress:
-                return i
+                if n == 1:
+                    return i
+                else:
+                    n = n - 1
 
     return -1
 
