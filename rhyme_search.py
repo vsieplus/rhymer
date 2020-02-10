@@ -46,8 +46,8 @@ def near(pron):
     # Calculate initial unstressed index
     unstressed_sound_idx = pron_proc.stress_idx(pron, pron_proc.UNSTRESSED)
 
-    # If primary stress exists
-    if prim_sound_idx != -1:
+    # If primary stress is after unstressed
+    if prim_sound_idx > unstressed_sound_idx:
         # Retrieve unstressed version of sounds to match
         post_stress_sounds = pron_proc.stressify(pron[prim_sound_idx:], 
             pron_proc.UNSTRESSED)
@@ -64,7 +64,7 @@ def near(pron):
 
     # If unstressed syllables do exist after primary stress or w/out primary
     # stress at all, find near rhymes using the unstressed syll. of given pron
-    if unstressed_sound_idx != -1:
+    if unstressed_sound_idx > prim_sound_idx:
         # Retrieve stressed version of sounds to match
         post_stressless_sounds = pron[(prim_sound_idx + unstressed_sound_idx):]
         post_stressless_sounds = pron_proc.stressify(post_stressless_sounds, 

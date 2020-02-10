@@ -24,7 +24,11 @@ class TestRhymeSearch(unittest.TestCase):
             self.assertIn(rhyme, rhyme_search.perfect(fire_pron))
 
     def test_near_rhymes(self):
-        return 0
+        caring_rhymes = [('wing', ['W', 'IH1', 'NG'], 1),
+                         ('sing', ['S', 'IH1', 'NG'], 1),
+                         ('king', ['K', 'IH1', 'NG'], 1)]
+        for rhyme in caring_rhymes:
+            self.assertIn(rhyme, rhyme_search.near(['K', 'EH1', 'R', 'IH0', 'NG']))
 
     def test_syllabic_rhymes(self):
         fire_rhymes = [('later', ['L', 'EY1', 'T', 'ER0'], 2),
