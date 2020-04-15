@@ -154,9 +154,6 @@ def identical(pron):
                              for phone in syll for p in phone]
     return match_sounds(stressed_syll_after, pron)
 
-def eye(pron):
-    return 0
-
 # Switch statement to retrieve correct rhyme_search function
 def rhyme_type_to_func(rtype):
     """Switch statement for determining behavior depending on specified
@@ -169,7 +166,6 @@ def rhyme_type_to_func(rtype):
         interact.R_TYPES[interact.PARA_IDX]: para,
         interact.R_TYPES[interact.ASSON_IDX]: asson,
         interact.R_TYPES[interact.ID_IDX]: identical,
-        interact.R_TYPES[interact.EYE_IDX]: eye,
     }
 
     return type_dict.get(rtype)

@@ -37,7 +37,7 @@ EXIT = "\nIs it already time? Well thanks for the rhymes!"
 
 # Rhyme Types with examples
 R_TYPES = ['perfect', 'near', 'syllabic', 'semi', 'para', 'assonance',
-           'identical', 'eye']
+           'identical']
 PERFECT_IDX = 0
 NEAR_IDX = 1
 SYLLABIC_IDX = 2
@@ -45,7 +45,6 @@ SEMI_IDX = 3
 PARA_IDX = 4
 ASSON_IDX = 5
 ID_IDX = 6
-EYE_IDX = 7
 
 RHYME_TYPES = """\nRhyme Types:\n
 'perfect'   - rhyme in which the final stressed vowel + all subsequent
@@ -67,10 +66,7 @@ RHYME_TYPES2 = """\nMore Rhyme Types:\n
 \t'bottle'  ~  'nozzle'\n
 'identical' - perfect rhyme in which the onset of the stressed syllable
               also matches\n
-\t 'leave'  ~  'believe\n
-'eye'       - a 'spelling' rhyme, where final sounds are spelled 
-              identically, but the sounds are not identical\n
-\t  'love'  ~  'move'"""
+\t 'leave'  ~  'believe'"""
 
 SEARCHING = "\nSearching for {} rhymes of the word {}...\n"
 STATS = "\nCalculating stats for the word {}...\n"

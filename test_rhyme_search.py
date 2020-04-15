@@ -78,8 +78,5 @@ class TestRhymeSearch(unittest.TestCase):
         for rhyme in leave_rhymes:
             self.assertIn(rhyme, leave_rhymes_id)
 
-    def test_eye_rhymes(self):
-        return 0
-
 if __name__ == '__main__':
     unittest.main()
