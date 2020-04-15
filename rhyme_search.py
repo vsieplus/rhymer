@@ -145,8 +145,14 @@ def asson(pron):
     return (match_pattern(vowel_pattern, pron_proc.ARPABET_VOWELS, pron) + 
             match_pattern(vowel_pattern_no_onset, pron_proc.ARPABET_VOWELS, pron))
 
+# perfect rhyme in which the onset of the stressed syllable
+# also matches - leave ~ believe
 def identical(pron):
-    return 0
+    syllables = pron_proc.syllabify_helper(pron)
+    stressed_syll_after = syllables[pron_proc.stressed_syll_idx(pron, pron_proc.PRIMARY_STRESS):]
+    stressed_syll_after = [p for syll in stressed_syll_after 
+                             for phone in syll for p in phone]
+    return match_sounds(stressed_syll_after, pron)
 
 def eye(pron):
     return 0

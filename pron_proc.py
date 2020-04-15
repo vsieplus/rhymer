@@ -102,3 +102,15 @@ def sound_pattern(pron, SOUNDS):
 # and Coda are lists containing ARPABET strings
 def syllabify_helper(pron):
     return syllabify.syllabify(pron)
+
+# Helper function to return the syllable index of a given stress, in the
+# output of syllabify(_helper)
+def stressed_syll_idx(pron, in_stress):
+    syllables = syllabify_helper(pron)
+    stress_pattern = stress(pron)
+
+    for i, stress_num in enumerate(stress_pattern):
+        if stress_num == in_stress:
+            return i
+
+    return -1

@@ -71,7 +71,12 @@ class TestRhymeSearch(unittest.TestCase):
             self.assertIn(rhyme, catnip_rhymes_para)
 
     def test_identical_rhymes(self):
-        return 0
+        leave_rhymes = [('believe', ['B', 'IH0', 'L', 'IY1', 'V'], 2),
+                        ('sleeve', ['S', 'L', 'IY1', 'V'], 1),
+                        ('cleave', ['K', 'L', 'IY1', 'V'], 1)]
+        leave_rhymes_id = rhyme_search.identical(['L', 'IY1', 'V'])
+        for rhyme in leave_rhymes:
+            self.assertIn(rhyme, leave_rhymes_id)
 
     def test_eye_rhymes(self):
         return 0
