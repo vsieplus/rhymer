@@ -5,6 +5,7 @@
 import setup 
 import interact
 import re
+import syllabify
 
 # Stress constants
 EMPTY_STRESS = ''
@@ -95,3 +96,8 @@ def stressify(sounds, STRESS):
 # Helper function to return the specified pattern of sounds in SOUNDS from pron
 def sound_pattern(pron, SOUNDS):
     return [phon if phon in SOUNDS else '' for phon in pron]
+
+# Helper function to return a sequence of sounds as list of sublists representing
+# its syllabification
+def syllabify_helper(pron):
+    return syllabify.syllabify(pron)

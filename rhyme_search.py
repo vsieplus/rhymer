@@ -90,8 +90,37 @@ def syllabic(pron):
     # the stressed syllable
     return match_sounds(final_syll, pron)
 
+# A semirhyme occurs when the stressed syllable + subsequent sounds of 
+# one word matches another, but the other has an extra trailing syllable
+# Ex. store ~ forecast (->), bookstore ~ book (<-)
 def semi(pron):
-    return 0
+    prim_stress_idx = pron_proc.stress_idx(pron, pron_proc.PRIMARY_STRESS)
+
+    stress_pattern = pron_proc.stress(pron)
+
+    # Look for (->) type semirhymes
+    post_stress_sounds = pron[prim_stress_idx:]
+    front_semirhymes = []
+    for word,phon in setup.ENTRIES:
+        phon_prim_stress_idx = pron_proc.stress_idx(phon, pron_proc.PRIMARY_STRESS)
+        phon_post_stress = phon[phon_prim_stress_idx:]
+        if (post_stress_sounds == phon_post_stress[:len(post_stress_sounds)] and
+                pron_proc.num_syllables(post_stress_sounds) == 
+                pron_proc.num_syllables(phon_post_stress) - 1):
+            front_semirhymes.append((word, phon, pron_proc.num_syllables(phon)))
+
+    # (<-) type semirhymes
+    back_semirhymes = []
+    # check if the stressed syllable is penultimate
+    syllables = pron_proc.syllabify_helper(pron)
+    for i in range(len(stress_pattern)):
+        if stress_pattern[i] == pron_proc.PRIMARY_STRESS:
+            stressed_syll_no_onset = list(syllables[i][1:])
+            stressed_syll_no_onset = [phon for seg in stressed_syll_no_onset for phon in seg]
+            back_semirhymes.extend(match_sounds(stressed_syll_no_onset, pron))
+            break
+    
+    return front_semirhymes + back_semirhymes
 
 # A pararhyme occurs when two words have same consonant pattern
 # (i.e. tall ~ tell)
