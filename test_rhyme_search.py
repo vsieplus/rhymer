@@ -55,10 +55,20 @@ class TestRhymeSearch(unittest.TestCase):
                       rhyme_search.semi(['B', 'UH1', 'K', 'S', 'T', 'AO2', 'R']))
 
     def test_para_rhymes(self):
-        return 0
+        ball_rhymes = [('bull', ['B', 'UH1', 'L'], 1),
+                       ('bill', ['B', 'IH1', 'L'], 1),
+                       ('bell', ['B', 'EH1', 'L'], 1)]
+        ball_rhymes_para = rhyme_search.para(['B', 'AA1', 'L'])
+        for rhyme in ball_rhymes:
+            self.assertIn(rhyme, ball_rhymes_para)
 
     def test_asson_rhymes(self):
-        return 0
+        catnip_rhymes = [('catfish', ['K', 'AE1', 'T', 'F', 'IH2', 'SH'], 2),
+                         ('rancid', ['R', 'AE1', 'N', 'S', 'IH0', 'D'], 2),
+                         ('average', ['AE1', 'V', 'R', 'IH0', 'JH'], 2)]
+        catnip_rhymes_para = rhyme_search.asson(['K', 'AE1', 'T', 'N', 'IH0', 'P'])
+        for rhyme in catnip_rhymes:
+            self.assertIn(rhyme, catnip_rhymes_para)
 
     def test_identical_rhymes(self):
         return 0

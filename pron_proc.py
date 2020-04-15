@@ -98,6 +98,7 @@ def sound_pattern(pron, SOUNDS):
     return [phon if phon in SOUNDS else '' for phon in pron]
 
 # Helper function to return a sequence of sounds as list of sublists representing
-# its syllabification
+# its syllabification. Each syllable is (Onset, Nucleus, Coda), where Onset, Nucleus
+# and Coda are lists containing ARPABET strings
 def syllabify_helper(pron):
     return syllabify.syllabify(pron)

@@ -136,10 +136,14 @@ def asson(pron):
     # Remove stress numbers from pronunciation
     nostress_pron = pron_proc.stressify(pron, pron_proc.EMPTY_STRESS)
 
-    # Extract vowel pattern
-    vowel_pattern = pron_proc.sound_pattern(nostress_pron, pron_proc.ARPABET_VOWELS)
+    stress_pattern = pron_proc.stress(pron)
 
-    return match_pattern(vowel_pattern, pron_proc.ARPABET_VOWELS, pron)
+    # Extract vowel pattern - consider both with/without onset
+    vowel_pattern = pron_proc.sound_pattern(nostress_pron, pron_proc.ARPABET_VOWELS)
+    vowel_pattern_no_onset = vowel_pattern[pron_proc.stress_idx(pron, stress_pattern[0]):]
+
+    return (match_pattern(vowel_pattern, pron_proc.ARPABET_VOWELS, pron) + 
+            match_pattern(vowel_pattern_no_onset, pron_proc.ARPABET_VOWELS, pron))
 
 def identical(pron):
     return 0
